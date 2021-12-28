@@ -8,20 +8,34 @@ distributionUrl=https\://services.gradle.org/distributions/gradle-6.1.1-bin.zip
 参考对应关系：[https://developer.android.google.cn/studio/releases/gradle-plugin.html#updating-gradle](https://developer.android.google.cn/studio/releases/gradle-plugin.html#updating-gradle)
 
 #### 软件架构
-软件架构说明
+Gradle 插件开发demo
 
 
 #### 安装教程
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+1.  注释掉 project/build.gradle 中 publish 的 classpath
+2.  注释掉 project/build.gradle 中 aop 的 classpath
+
+3.  setting.gradle 中 只留下 app 和 publish
+4.  运行 gradle publish
+
+5.  setting.gradle 中 放开 aop-plugin 和 aop-annotation
+6.  运行 gradle publish
+
+7.  setting.gradle 中 放开 aop-runtime
+8.  运行 gradle publish
 
 #### 使用说明
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+#### publish 插件
+
+1.   project/build.gradle  中添加 publish 的 classpath
+2.   library/build.gradle  中使用 publish 插件，并配置 publishConfig
+
+#### aop 插件
+
+1.  project/build.gradle  中添加 aop 的 classpath
+2.  runtime/build.gradle  中使用 aop 插件
 
 #### 参与贡献
 

@@ -1,25 +1,37 @@
 apply plugin: 'maven-publish'
 
+def repoGroupId = POM_GROUP
+def repoArtifactId = POM_ARTIFACT_ID
+def repoVersion = POM_VERSION
+
+def repoUrl = REPO_URL
+def repoUser = REPO_USERNAME
+def repoPass = REPO_PASSWORD
+
 afterEvaluate {
     publishing {
         publications {
             maven(MavenPublication) {
                 from components.java
-                groupId POM_GROUP
-                artifactId POM_ARTIFACT_ID
-                version POM_VERSION
+                groupId repoGroupId
+                artifactId repoArtifactId
+                version repoVersion
             }
         }
         repositories {
-            mavenLocal() // 默認本地倉庫
-//            maven { url uri('../../repo') } // 自定義路徑
-//            maven {
-//                url REPO_URL
-//                credentials{
-//                    username REPO_USERNAME
-//                    password REPO_PASSWORD
-//                }
-//            }
+            if (repoUrl == null || repoUrl.isEmpty()) {
+                mavenLocal()
+            } else {
+                maven {
+                    url uri(repoUrl)
+                    if (repoUser != null && !repoUser.isEmpty() && repoPass != null && !repoPass.isEmpty()) {
+                        credentials {
+                            username repoUser
+                            password repoPass
+                        }
+                    }
+                }
+            }
         }
     }
 }
@@ -27,14 +39,14 @@ afterEvaluate {
 /*
  * *********************************************************
  *
- *   ./gradlew publish
+ *   gradlew publish
  *
  * *********************************************************
  *
  *  1.在项目中新建gradle.properties文件，然后配置如下属性：
  *
  *  #上传构件的信息
- *  POM_GROUP = aaa.bbb.ccc                    //组织名
+ *  POM_GROUP = aaa.bbb.ccc                   //组织名
  *  POM_ARTIFACT_ID = dd                      //项目名
  *  POM_VERSION = ee                          //版本名
  *
