@@ -1,0 +1,4 @@
+rootProject.name = "GradlePlugin_4_0_0"
+include ':app'
+include ':publish'
+include ':plugin-aop-category:aop-plugin'

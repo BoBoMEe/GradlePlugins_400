@@ -1,0 +1,22 @@
+plugins {
+    id 'groovy'
+    id 'com.android.maven-publish'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+dependencies {
+    implementation gradleApi()
+    implementation localGroovy()
+    implementation 'com.android.tools.build:gradle:4.0.0'
+    implementation 'org.aspectj:aspectjtools:1.9.7'
+}
+
+publishConfig {
+    groupId = 'com.bobomee.plugin'
+    artifactId = 'aop'
+    version = "1.0.8-SNAPSHOT"
+}
