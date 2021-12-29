@@ -16,11 +16,6 @@ class PublishMaven implements Plugin<Project> {
 
         project.plugins.apply MavenPublishPlugin
         PublishingExtension publishing = project.extensions.getByType(PublishingExtension)
-        def publishLocal = publishingConfig.local
-        def publishSnapshot = publishingConfig.snapshot
-        def publishLocalUrl = publishingConfig.repoLocal
-        def publishLocalUrlEmpty = publishLocalUrl.isEmpty()
-        def publishRepoUrl = publishSnapshot? publishingConfig.repoSnapshot : publishingConfig.repoRelease
 
         project.afterEvaluate {
             for (SoftwareComponent components : project.components) {
@@ -37,19 +32,29 @@ class PublishMaven implements Plugin<Project> {
                 })
             }
 
+            def publishLocal = publishingConfig.local
+            def publishSnapshot = publishingConfig.snapshot
+            def publishLocalUrl = publishingConfig.repoLocal
+            def publishLocalUrlEmpty = publishLocalUrl.isEmpty()
+            def publishRepoUrl = publishSnapshot ? publishingConfig.repoSnapshot : publishingConfig.repoRelease
+
             publishing.repositories { artifactRepositories ->
-                if (publishLocal){
-                    if (publishLocalUrlEmpty){
-                        mavenLocal()
-                    }else {
-                        avenArtifactRepository.url = publishLocalUrl
+                if (publishLocal) {
+                    if (publishLocalUrlEmpty) {
+                        artifactRepositories.mavenLocal()
+                    } else {
+                        artifactRepositories.maven { localRepository ->
+                            localRepository.url = publishLocalUrl
+                        }
                     }
                 } else {
-                    mavenArtifactRepository.url = publishRepoUrl
-                    mavenArtifactRepository.credentials {
-                        credentials ->
-                            credentials.username = publishingConfig.repoName
-                            credentials.password = publishingConfig.repoPassword
+                    artifactRepositories.maven { artifactRepository ->
+                        artifactRepository.url = publishRepoUrl
+                        artifactRepository.credentials {
+                            credential ->
+                                credential.username = publishingConfig.repoName
+                                credential.password = publishingConfig.repoPassword
+                        }
                     }
                 }
             }
