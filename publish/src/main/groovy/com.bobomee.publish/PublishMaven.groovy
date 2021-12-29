@@ -20,7 +20,7 @@ class PublishMaven implements Plugin<Project> {
         project.afterEvaluate {
             for (SoftwareComponent components : project.components) {
                 def componentName = components.name
-                if (componentName == "release" || componentName == ""){
+                if (componentName == "release" || componentName == "java"){
                     publishing.publications({ publications ->
                         publications.create(components.name, MavenPublication.class, { MavenPublication publication ->
                             publication.groupId = publishingConfig.groupId
