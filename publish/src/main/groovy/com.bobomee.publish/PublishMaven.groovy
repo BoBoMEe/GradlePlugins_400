@@ -19,17 +19,20 @@ class PublishMaven implements Plugin<Project> {
 
         project.afterEvaluate {
             for (SoftwareComponent components : project.components) {
-                publishing.publications({ publications ->
-                    publications.create(components.name, MavenPublication.class, { MavenPublication publication ->
-                        publication.groupId = publishingConfig.groupId
-                        publication.artifactId = publishingConfig.artifactId
-                        publication.version = publishingConfig.version
-                        publication.from(components)
-                        publication.pom {
-                            mavenPom -> configPom(mavenPom, publishingConfig)
-                        }
+                def componentName = components.name
+                if (componentName == "release" || componentName == ""){
+                    publishing.publications({ publications ->
+                        publications.create(components.name, MavenPublication.class, { MavenPublication publication ->
+                            publication.groupId = publishingConfig.groupId
+                            publication.artifactId = publishingConfig.artifactId
+                            publication.version = publishingConfig.version
+                            publication.from(components)
+                            publication.pom {
+                                mavenPom -> configPom(mavenPom, publishingConfig)
+                            }
+                        })
                     })
-                })
+                }
             }
 
             def publishLocal = publishingConfig.local
